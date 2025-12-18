@@ -4,16 +4,42 @@
 
 body {
     margin: 20px 0;
-    background: #0b0b0d;
+    background: black;
 }
 
-#game {
+.main-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10em;
+
+    img {
+        width: 500px;
+    }
+
+    button {
+        padding: 1em;
+        background-color: #6b0f1a;
+        color: #d8cfc4;
+        border: none;
+        border-radius: 5px;
+        transition: transform 0.5s ease-in-out;
+        cursor: pointer;
+    }
+
+    button:hover {
+        transform: scale(1.1);
+    }
+}
+
+.game {
     max-width: 960px;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    perspective: 1200px;
+    perspective: 1500px;
 }
 
 .card {
