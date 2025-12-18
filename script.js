@@ -50,16 +50,12 @@ const cards = [{
 
 const gameCards = cards.concat(cards).sort(() => 0.5 - Math.random());
 
-let firstGuess = '';
-let secondGuess = '';
+let selected = [];
 let count = 0;
 let previousTarget = null;
 let delay = 1200;
 
 const game = document.getElementById('game');
-const grid = document.createElement('section');
-grid.setAttribute('class', 'grid');
-game.appendChild(grid);
 
 gameCards.forEach(item => {
     const { name, img } = item;
@@ -75,39 +71,36 @@ gameCards.forEach(item => {
     back.classList.add('back');
     back.style.backgroundImage = `url(${img})`;
 
-    grid.appendChild(card);
+    game.appendChild(card);
     card.appendChild(front);
     card.appendChild(back);
 });
 
 const match = () => {
-    const selected = document.querySelectorAll('.selected');
     selected.forEach(card => {
         card.classList.add('match');
     });
 };
 
 const resetGuesses = () => {
-    firstGuess = '';
-    secondGuess = '';
     count = 0;
     previousTarget = null;
 
-    var selected = document.querySelectorAll('.selected');
     selected.forEach(card => {
         card.classList.remove('selected');
     });
+
+    selected = [];
 };
 
-grid.addEventListener('click', event => {
+game.addEventListener('click', event => {
 
-    const clicked = event.target;
+    const clicked = event.target.parentNode;
 
     if (
-        clicked.nodeName === 'SECTION' ||
         clicked === previousTarget ||
-        clicked.parentNode.classList.contains('selected') ||
-        clicked.parentNode.classList.contains('match')
+        clicked.classList.contains('selected') ||
+        clicked.classList.contains('match')
     ) {
         return;
     }
@@ -115,22 +108,19 @@ grid.addEventListener('click', event => {
     if (count < 2) {
         count++;
         if (count === 1) {
-            firstGuess = clicked.parentNode.dataset.name;
-            console.log(firstGuess);
-            clicked.parentNode.classList.add('selected');
+            clicked.classList.add('selected');
         } else {
-            secondGuess = clicked.parentNode.dataset.name;
-            console.log(secondGuess);
-            clicked.parentNode.classList.add('selected');
+            clicked.classList.add('selected');
         }
+        selected.push(clicked);
 
-        if (firstGuess && secondGuess) {
-            if (firstGuess === secondGuess) {
+        if (selected.length === 2) {
+            const [first, second] = selected.map(n => n.dataset.name);
+            if (first === second) {
                 setTimeout(match, delay);
             }
             setTimeout(resetGuesses, delay);
         }
         previousTarget = clicked;
     }
-
 });

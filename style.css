@@ -7,7 +7,7 @@ body {
     background: #0b0b0d;
 }
 
-.grid {
+#game {
     max-width: 960px;
     margin: 0 auto;
     display: flex;
