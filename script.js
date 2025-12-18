@@ -48,10 +48,8 @@ const cards = [{
 },
 ];
 
-const gameCards = cards.concat(cards).sort(() => 0.5 - Math.random());
 
 let selected = [];
-let count = 0;
 let previousTarget = null;
 let delay = 1200;
 let correctGuesses = 0;
@@ -82,11 +80,12 @@ function init() {
 
 function startGame() {
 
+    const gameCards = cards.concat(cards).sort(() => 0.5 - Math.random());
+
     intro.pause();
     dmc.play();
 
     selected = [];
-    count = 0;
     previousTarget = null;
     correctGuesses = 0;
 
@@ -96,7 +95,11 @@ function startGame() {
     document.body.appendChild(game);
 
     gameCards.forEach(item => {
+        // Desctructuring d objet
         const { name, img } = item;
+
+        // let name = item.name;
+        // let img = item.img;
 
         const card = document.createElement('div');
         card.classList.add('card');
@@ -146,6 +149,7 @@ function startGame() {
         const clicked = event.target.parentNode;
 
         if (
+            event.target.classList.contains('game') ||
             clicked === previousTarget ||
             clicked.classList.contains('selected') ||
             clicked.classList.contains('match')
@@ -153,13 +157,10 @@ function startGame() {
             return;
         }
 
-        if (count < 2) {
-            count++;
-            if (count === 1) {
-                clicked.classList.add('selected');
-            } else {
-                clicked.classList.add('selected');
-            }
+        if (selected.length < 2) {
+
+            clicked.classList.add('selected');
+
             selected.push(clicked);
 
             if (selected.length === 2) {
@@ -175,7 +176,7 @@ function startGame() {
 }
 
 function checkVictory() {
-    if (correctGuesses === 1) {
+    if (correctGuesses === cards.length) {
         //TODO New Game?
     }
 }
